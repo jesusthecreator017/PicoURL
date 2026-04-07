@@ -3,8 +3,6 @@ package store
 import (
 	"context"
 	"fmt"
-
-	"github.com/redis/go-redis/v9"
 )
 
 type CachedStore struct {
@@ -34,9 +32,7 @@ func (s *CachedStore) GetOriginalURL(ctx context.Context, shortURL string) (stri
 	if err == nil {
 		return originalURL, nil // cache hit
 	}
-	if err != redis.Nil {
-		// Redis error (not just a miss) — fall through to Postgres
-	}
+	// err is redis.Nil (cache miss) or a Redis error — either way fall through to Postgres
 
 	// Cache miss — get from DB
 	originalURL, err = s.db.GetOriginalURL(ctx, shortURL)
@@ -64,9 +60,7 @@ func (s *CachedStore) GetCount(ctx context.Context, shortURL string) (int, error
 	if err == nil {
 		return count, nil
 	}
-	if err != redis.Nil {
-		// Redis error (not just a miss) — fall through to Postgres
-	}
+	// err is redis.Nil (cache miss) or a Redis error — either way fall through to Postgres
 
 	// Cache miss, get from DB
 	count, err = s.db.GetCount(ctx, shortURL)
