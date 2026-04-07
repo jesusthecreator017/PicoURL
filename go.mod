@@ -1,13 +1,15 @@
 module github.com/jesusthecreator017/PicoURL
 
-go 1.24.0
+go 1.25.0
 
 require (
-	github.com/jackc/pgx/v5 v5.9.1
+	github.com/jackc/pgx/v5 v5.7.2
 	github.com/redis/go-redis/v9 v9.18.0
 )
 
 require github.com/joho/godotenv v1.5.1
+
+require golang.org/x/crypto v0.31.0 // indirect
 
 require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
