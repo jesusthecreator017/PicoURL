@@ -1,10 +1,12 @@
 package store
 
+import "context"
+
 type Store interface {
-	SaveURL(shortURL, originalURL string) error
-	GetOriginalURL(shortURL string) (string, error)
-	IncrementCount(shortURL string) error
-	GetCount(shortURL string) (int, error)
-	DeleteURL(shortURL string) error
+	SaveURL(ctx context.Context, shortURL, originalURL string) error
+	GetOriginalURL(ctx context.Context, shortURL string) (string, error)
+	IncrementCount(ctx context.Context, shortURL string) error
+	GetCount(ctx context.Context, shortURL string) (int, error)
+	DeleteURL(ctx context.Context, shortURL string) error
 	Close() error
 }

@@ -1,6 +1,9 @@
 package config
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/jesusthecreator017/PicoURL/internal/env"
 )
 
@@ -17,12 +20,14 @@ type PostgresConfig struct {
 	User     string
 	Password string
 	DB       string
+	SSLMode  string
 }
 
 type RedisConfig struct {
 	Addr     string
 	Password string
 	DB       int
+	CacheTTL time.Duration // Cache Time-To-Live in seconds
 }
 
 func LoadRedisConfig() *RedisConfig {
@@ -30,6 +35,7 @@ func LoadRedisConfig() *RedisConfig {
 		Addr:     env.GetString("REDIS_ADDR", "localhost:6379"),
 		Password: env.GetString("REDIS_PASSWORD", ""),
 		DB:       env.GetInt("REDIS_DB", 0),
+		CacheTTL: time.Duration(env.GetInt("REDIS_CACHE_TTL_MINUTES", 1440)) * time.Minute, // Default to 24 hours
 	}
 }
 
@@ -40,6 +46,7 @@ func LoadPostgresConfig() *PostgresConfig {
 		User:     env.GetString("POSTGRES_USER", "postgres"),
 		Password: env.GetString("POSTGRES_PASSWORD", "password"),
 		DB:       env.GetString("POSTGRES_DB", "pico_url"),
+		SSLMode:  env.GetString("POSTGRES_SSLMODE", "disable"),
 	}
 }
 
@@ -50,4 +57,8 @@ func LoadConfig() *Config {
 		Postgres:   *LoadPostgresConfig(),
 		Redis:      *LoadRedisConfig(),
 	}
+}
+
+func DSN(cfg *PostgresConfig) string {
+	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s", cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.DB, cfg.SSLMode)
 }
