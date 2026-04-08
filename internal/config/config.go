@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"net/url"
 	"time"
 
 	"github.com/jesusthecreator017/PicoURL/internal/env"
@@ -60,5 +61,5 @@ func LoadConfig() *Config {
 }
 
 func DSN(cfg *PostgresConfig) string {
-	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s", cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.DB, cfg.SSLMode)
+	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s", cfg.User, url.QueryEscape(cfg.Password), cfg.Host, cfg.Port, cfg.DB, cfg.SSLMode)
 }
