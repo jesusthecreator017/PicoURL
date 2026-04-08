@@ -2,11 +2,15 @@ package api
 
 import (
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/jesusthecreator017/PicoURL/internal/service"
 )
+
+const staticDir = "/static"
 
 type Application struct {
 	service service.URLService
@@ -35,6 +39,23 @@ func (app *Application) setupRoutes() *chi.Mux {
 	r.Post("/api/shorten", app.handleShorten)
 	r.Get("/api/stats/{shortcode}", app.handleStats)
 	r.Delete("/api/{shortcode}", app.handleDelete)
+
+	// Static file serving
+	if _, err := os.Stat(staticDir); err == nil {
+		// Serve Vite-build assets
+		fileServer := http.FileServer(http.Dir(staticDir))
+		r.Handle("/assets/*", http.StripPrefix("/", fileServer))
+
+		// Serve the favicon
+		r.Get("/favicon.ico", func(w http.ResponseWriter, req *http.Request) {
+			http.ServeFile(w, req, filepath.Join(staticDir, "favicon.ico"))
+		})
+
+		// Root serves the React SPA
+		r.Get("/", func(w http.ResponseWriter, req *http.Request) {
+			http.ServeFile(w, req, filepath.Join(staticDir, "index.html"))
+		})
+	}
 
 	// Redirect route
 	r.Get("/{shortcode}", app.handleRedirect)

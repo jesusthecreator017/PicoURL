@@ -24,5 +24,9 @@ Thumbs.db
 # Go
 /vendor/
 
+# Node
+node_modules/
+frontend/dist/
+
 # Claude
 CLAUDE.md
