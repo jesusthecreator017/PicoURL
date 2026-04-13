@@ -97,8 +97,8 @@ function App() {
               >
                 <input
                   className="url-input"
-                  type="url"
-                  placeholder="https://example.com"
+                  type="text"
+                  placeholder="example.com or https://example.com"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   required

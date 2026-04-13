@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"strings"
 
 	"github.com/jesusthecreator017/PicoURL/internal/shortcode"
 	"github.com/jesusthecreator017/PicoURL/internal/store"
@@ -29,6 +30,11 @@ func NewURLService(store store.Store) *urlService {
 }
 
 func (s *urlService) Shorten(ctx context.Context, originalURL string) (string, error) {
+	// Auto-prepend https:// if no scheme is provided
+	if !strings.HasPrefix(originalURL, "http://") && !strings.HasPrefix(originalURL, "https://") {
+		originalURL = "https://" + originalURL
+	}
+
 	// Validate URL format and reachability
 	if err := utils.ValidateURLFormat(originalURL); err != nil {
 		return "", ErrInvalidURL
