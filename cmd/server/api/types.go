@@ -16,3 +16,7 @@ type statsResponse struct {
 type errorResponse struct {
 	Error string `json:"error"`
 }
+
+type totalResponse struct {
+	Total int `json:"total"`
+}

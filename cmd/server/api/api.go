@@ -39,6 +39,7 @@ func (app *Application) setupRoutes() *chi.Mux {
 	r.Post("/api/shorten", app.handleShorten)
 	r.Get("/api/stats/{shortcode}", app.handleStats)
 	r.Delete("/api/{shortcode}", app.handleDelete)
+	r.Get("/api/total", app.handleTotal)
 
 	// Static file serving
 	if _, err := os.Stat(staticDir); err == nil {

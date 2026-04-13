@@ -13,6 +13,7 @@ type URLService interface {
 	Resolve(ctx context.Context, shortURL string) (string, error)
 	GetStats(ctx context.Context, shortURL string) (int, error)
 	Delete(ctx context.Context, shortURL string) error
+	GetTotalCount(ctx context.Context) (int, error)
 }
 
 type urlService struct {
@@ -77,4 +78,8 @@ func (s *urlService) GetStats(ctx context.Context, shortURL string) (int, error)
 
 func (s *urlService) Delete(ctx context.Context, shortURL string) error {
 	return s.store.DeleteURL(ctx, shortURL)
+}
+
+func (s *urlService) GetTotalCount(ctx context.Context) (int, error) {
+	return s.store.GetTotalURLCount(ctx)
 }

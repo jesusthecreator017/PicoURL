@@ -12,3 +12,6 @@ SELECT click_count FROM urls WHERE short_url = $1;
 
 -- name: DeleteURL :exec
 DELETE FROM urls WHERE short_url = $1;
+
+-- name: GetTotalURLCount :one
+SELECT COUNT(*) FROM urls;

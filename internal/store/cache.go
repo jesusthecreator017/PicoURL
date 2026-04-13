@@ -82,6 +82,10 @@ func (s *CachedStore) DeleteURL(ctx context.Context, shortURL string) error {
 	return nil
 }
 
+func (s *CachedStore) GetTotalURLCount(ctx context.Context) (int, error) {
+	return s.db.GetTotalURLCount(ctx)
+}
+
 func (s *CachedStore) Close() error {
 	_ = s.cache.Close()
 	return s.db.Close()

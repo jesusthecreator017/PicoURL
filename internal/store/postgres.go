@@ -61,6 +61,11 @@ func (p *PostgresStore) DeleteURL(ctx context.Context, shortURL string) error {
 	return p.queries.DeleteURL(ctx, shortURL)
 }
 
+func (p *PostgresStore) GetTotalURLCount(ctx context.Context) (int, error) {
+	count, err := p.queries.GetTotalURLCount(ctx)
+	return int(count), err
+}
+
 func (p *PostgresStore) Close() error {
 	p.pool.Close()
 	return nil

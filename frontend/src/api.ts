@@ -2,6 +2,19 @@ export interface ShortenResponse {
   short_url: string;
 }
 
+export interface TotalResponse {
+  total: number;
+}
+
+export async function getTotalCount(): Promise<TotalResponse> {
+  const res = await fetch("/api/total");
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error || "Something went wrong");
+  }
+  return data;
+}
+
 // Use just the shorten URL endpoint for now
 export default async function shortenURL(url: string): Promise<ShortenResponse> {
   const res = await fetch("/api/shorten", {

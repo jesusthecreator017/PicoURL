@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useMutation } from "@tanstack/react-query";
-import shortenURL from "./api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import shortenURL, { getTotalCount } from "./api";
 import "./App.css";
 
 function Typewriter({ text, onDone }: { text: string; onDone?: () => void }) {
@@ -32,6 +32,12 @@ function App() {
   const [url, setUrl] = useState("");
   const [copied, setCopied] = useState(false);
   const [typing, setTyping] = useState(false);
+  const queryClient = useQueryClient();
+
+  const { data: totalData } = useQuery({
+    queryKey: ["totalCount"],
+    queryFn: getTotalCount,
+  });
 
   const { data, isPending, isError, error, mutate } = useMutation({
     mutationFn: shortenURL,
@@ -39,6 +45,7 @@ function App() {
       setUrl("");
       setCopied(false);
       setTyping(true);
+      queryClient.invalidateQueries({ queryKey: ["totalCount"] });
     },
   });
 
@@ -164,6 +171,12 @@ function App() {
           </div>
         </div>
       </div>
+
+      {totalData != null && (
+        <p className="total-count">
+          {totalData.total.toLocaleString()} link{totalData.total !== 1 ? "s" : ""} shortened
+        </p>
+      )}
     </>
   );
 }

@@ -78,6 +78,16 @@ func (app *Application) handleStats(w http.ResponseWriter, req *http.Request) {
 	})
 }
 
+func (app *Application) handleTotal(w http.ResponseWriter, req *http.Request) {
+	total, err := app.service.GetTotalCount(req.Context())
+	if err != nil {
+		helpers.WriteJson(w, http.StatusInternalServerError, errorResponse{Error: "failed to get total count"})
+		return
+	}
+
+	helpers.WriteJson(w, http.StatusOK, totalResponse{Total: total})
+}
+
 func (app *Application) handleDelete(w http.ResponseWriter, req *http.Request) {
 	// Read pathparams
 	shortCode := chi.URLParam(req, "shortcode")

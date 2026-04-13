@@ -8,5 +8,6 @@ type Store interface {
 	IncrementCount(ctx context.Context, shortURL string) error
 	GetCount(ctx context.Context, shortURL string) (int, error)
 	DeleteURL(ctx context.Context, shortURL string) error
+	GetTotalURLCount(ctx context.Context) (int, error)
 	Close() error
 }

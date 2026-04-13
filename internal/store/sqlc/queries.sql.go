@@ -40,6 +40,17 @@ func (q *Queries) GetOriginalURL(ctx context.Context, shortUrl string) (string, 
 	return original_url, err
 }
 
+const getTotalURLCount = `-- name: GetTotalURLCount :one
+SELECT COUNT(*) FROM urls
+`
+
+func (q *Queries) GetTotalURLCount(ctx context.Context) (int64, error) {
+	row := q.db.QueryRow(ctx, getTotalURLCount)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const incrementCount = `-- name: IncrementCount :exec
 UPDATE urls SET click_count = click_count + 1 WHERE short_url = $1
 `
