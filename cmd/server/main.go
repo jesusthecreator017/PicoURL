@@ -38,7 +38,7 @@ func main() {
 	svc := service.NewURLService(cachedStore)
 
 	// Create the api end and start the server
-	app := api.NewApplication(svc)
+	app := api.NewApplication(svc, cfg.CorsOrigin)
 
 	log.Printf("Server starting on :%s", cfg.Port)
 	if err := http.ListenAndServe(":"+cfg.Port, app.Handler()); err != nil {
